@@ -1,0 +1,14 @@
+seed = 7
+episodes = 5
+hops = 3
+
+[environment]
+name = "sensor_fusion"
+num_agents = 5
+num_objects = 12
+visibility_prob = 0.35
+
+[communication]
+topology = "ring"
+compressor = "novelty_topk"
+message_budget = 3
