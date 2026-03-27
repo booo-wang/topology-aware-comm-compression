@@ -16,6 +16,7 @@ The project is positioned as a portfolio-ready engineering artifact in the multi
 - JSON result persistence for later plotting and report writing
 - curated demo scenarios for quick showcase runs
 - Markdown report export for GitHub-friendly summaries
+- static HTML dashboard generation for presentation-ready visuals
 
 ## Project Goal
 
@@ -41,6 +42,7 @@ Build a clean, extensible sandbox for experimenting with how communication topol
   - reusable sweep pipeline
   - result persistence
   - Markdown report export
+  - static dashboard export
 - Systems understanding:
   - communication topology effects
   - budgeted message passing
@@ -52,7 +54,7 @@ Build a clean, extensible sandbox for experimenting with how communication topol
 ```text
 configs/     experiment, sweep, and demo configs
 docs/        project notes and roadmap
-results/     saved benchmark outputs
+results/     saved benchmark outputs and generated reports
 scripts/     runnable helper scripts
 src/tacc/    library code
 tests/       smoke tests
@@ -92,6 +94,13 @@ Export the latest benchmark output into a Markdown summary:
 ```powershell
 $env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 scripts/export_markdown_report.py
+```
+
+Generate a static dashboard page from the latest benchmark output:
+
+```powershell
+$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
+py -3 scripts/generate_dashboard.py
 ```
 
 Or run the package entry point directly:
