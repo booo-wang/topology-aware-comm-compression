@@ -1,3 +1,5 @@
+name = "sensor_fusion_baseline"
+output_dir = "results"
 seed = 7
 episodes = 5
 hops = 3
@@ -12,3 +14,4 @@ visibility_prob = 0.35
 topology = "ring"
 compressor = "novelty_topk"
 message_budget = 3
+message_dropout_prob = 0.0
