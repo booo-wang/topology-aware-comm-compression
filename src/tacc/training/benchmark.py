@@ -48,6 +48,17 @@ def save_benchmark(result: dict[str, object], output_dir: str, benchmark_name: s
     return target_path
 
 
+def build_cli_summary(result: dict[str, object], saved_to: str | None = None) -> dict[str, object]:
+    experiments = result["experiments"]
+    return {
+        "benchmark": result["benchmark"],
+        "num_experiments": result["num_experiments"],
+        "saved_to": saved_to,
+        "top_result": result["top_result"],
+        "top_5": experiments[:5],
+    }
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Run a benchmark sweep for topology-aware communication compression.")
     parser.add_argument("--config", required=True, help="Path to a TOML config file with a [sweep] section.")
@@ -59,10 +70,11 @@ def main(argv: list[str] | None = None) -> None:
     args = build_parser().parse_args(argv)
     config = load_config(args.config)
     result = run_benchmark(args.config)
+    saved_to = None
     if args.save:
         output_path = save_benchmark(result, config.output_dir, config.name)
-        result["saved_to"] = str(output_path)
-    print(json.dumps(result, indent=2))
+        saved_to = str(output_path)
+    print(json.dumps(build_cli_summary(result, saved_to=saved_to), indent=2))
 
 
 if __name__ == "__main__":
