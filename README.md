@@ -1,12 +1,12 @@
 # Topology-Aware Communication Compression
 
-Research scaffold for studying communication-efficient multi-agent coordination under partial observability.
+Practical toolkit for exploring communication-efficient multi-agent coordination under partial observability.
 
 This repository is the skeleton for Project B:
 
 **Topology-Aware Communication Compression for Multi-Agent Partial Observability**
 
-The project now supports more than a single smoke run:
+The project is positioned as a portfolio-ready engineering artifact in the multi-agent direction:
 
 - a synthetic sensor-fusion environment with partial observations
 - configurable communication topologies
@@ -14,12 +14,14 @@ The project now supports more than a single smoke run:
 - message dropout for robustness experiments
 - batch benchmark sweeps over topologies, budgets, and visibility settings
 - JSON result persistence for later plotting and report writing
+- curated demo scenarios for quick showcase runs
+- Markdown report export for GitHub-friendly summaries
 
-## Research Question
+## Project Goal
 
-Under a fixed communication budget, which message compression strategies preserve the most useful global information across different multi-agent communication topologies?
+Build a clean, extensible sandbox for experimenting with how communication topology and message compression affect shared state recovery in a multi-agent system.
 
-## Current Components
+## What This Shows
 
 - Environments:
   - synthetic sensor fusion
@@ -34,17 +36,21 @@ Under a fixed communication budget, which message compression strategies preserv
   - `novelty_then_fill`
   - `degree_aware_novelty`
   - `random_k`
-- Metrics:
-  - mean / min / max recall
-  - communication cost
-  - message count
-  - recall-per-cost efficiency
-  - per-hop recall trajectory
+- Engineering maturity:
+  - configurable experiment runs
+  - reusable sweep pipeline
+  - result persistence
+  - Markdown report export
+- Systems understanding:
+  - communication topology effects
+  - budgeted message passing
+  - robustness to dropout
+  - tradeoffs between recall and efficiency
 
 ## Repository Layout
 
 ```text
-configs/     experiment and sweep configs
+configs/     experiment, sweep, and demo configs
 docs/        project notes and roadmap
 results/     saved benchmark outputs
 scripts/     runnable helper scripts
@@ -74,6 +80,20 @@ $env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 scripts/run_benchmark.py
 ```
 
+Run a smaller demo suite that is easier to show in a portfolio:
+
+```powershell
+$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
+py -3 scripts/run_demo_suite.py
+```
+
+Export the latest benchmark output into a Markdown summary:
+
+```powershell
+$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
+py -3 scripts/export_markdown_report.py
+```
+
 Or run the package entry point directly:
 
 ```powershell
@@ -83,4 +103,4 @@ py -3 -m tacc.training.runner --config configs/sensor_fusion_baseline.toml --sav
 
 ## Why This Repo Exists
 
-This repo is meant to become the engineering companion to a research project, not just a one-off demo. The goal is to make future experiments easy to run, compare, save, and explain.
+This repo is meant to strengthen practical credibility in the multi-agent direction. The goal is to show that you can design a usable simulation toolkit, compare strategy variants cleanly, and present results in a way that feels polished on GitHub.
