@@ -9,7 +9,7 @@ from random import Random
 
 from tacc.comm import build_compressor, build_topology
 from tacc.comm.compression import MessageContext
-from tacc.config import ExperimentConfig, load_config
+from tacc.config import ExperimentConfig, load_config, resolve_output_dir
 from tacc.envs import SensorFusionEnv
 
 
@@ -124,7 +124,7 @@ def run_experiment(config: ExperimentConfig) -> dict[str, object]:
     }
 
 
-def save_result(result: dict[str, object], output_dir: str, experiment_name: str) -> Path:
+def save_result(result: dict[str, object], output_dir: Path | str, experiment_name: str) -> Path:
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     target_dir = Path(output_dir)
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -145,7 +145,8 @@ def main(argv: list[str] | None = None) -> None:
     config = load_config(args.config)
     result = run_experiment(config)
     if args.save:
-        output_path = save_result(result, config.output_dir, config.name)
+        output_dir = resolve_output_dir(args.config, config.output_dir)
+        output_path = save_result(result, output_dir, config.name)
         result["saved_to"] = str(output_path)
     print(json.dumps(result, indent=2))
 
