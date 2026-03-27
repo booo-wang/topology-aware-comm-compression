@@ -71,42 +71,36 @@ py -3 -m pip install -e .
 Run a single experiment:
 
 ```powershell
-$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 scripts/run_smoke.py
 ```
 
 Run a benchmark sweep and persist results:
 
 ```powershell
-$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 scripts/run_benchmark.py
 ```
 
 Run a smaller demo suite that is easier to show in a portfolio:
 
 ```powershell
-$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 scripts/run_demo_suite.py
 ```
 
 Export the latest benchmark output into a Markdown summary:
 
 ```powershell
-$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 scripts/export_markdown_report.py
 ```
 
 Generate a static dashboard page from the latest benchmark output:
 
 ```powershell
-$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 scripts/generate_dashboard.py
 ```
 
 Or run the package entry point directly:
 
 ```powershell
-$env:PYTHONPATH='D:\github_project\topology-aware-comm-compression\src'
 py -3 -m tacc.training.runner --config configs/sensor_fusion_baseline.toml --save
 ```
 
