@@ -5,7 +5,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-from tacc.config import expand_sweep, load_config
+from tacc.config import expand_sweep, load_config, resolve_output_dir
 from tacc.training.runner import run_experiment
 
 
@@ -39,7 +39,7 @@ def run_benchmark(config_path: str | Path) -> dict[str, object]:
     }
 
 
-def save_benchmark(result: dict[str, object], output_dir: str, benchmark_name: str) -> Path:
+def save_benchmark(result: dict[str, object], output_dir: Path | str, benchmark_name: str) -> Path:
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     target_dir = Path(output_dir)
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -72,7 +72,8 @@ def main(argv: list[str] | None = None) -> None:
     result = run_benchmark(args.config)
     saved_to = None
     if args.save:
-        output_path = save_benchmark(result, config.output_dir, config.name)
+        output_dir = resolve_output_dir(args.config, config.output_dir)
+        output_path = save_benchmark(result, output_dir, config.name)
         saved_to = str(output_path)
     print(json.dumps(build_cli_summary(result, saved_to=saved_to), indent=2))
 
