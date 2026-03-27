@@ -60,6 +60,16 @@ def load_config(path: str | Path) -> ExperimentConfig:
     )
 
 
+def resolve_output_dir(config_path: str | Path, output_dir: str | Path) -> Path:
+    target = Path(output_dir)
+    if target.is_absolute():
+        return target
+
+    config_dir = Path(config_path).resolve().parent
+    anchor = config_dir.parent if config_dir.name == 'configs' else config_dir
+    return anchor / target
+
+
 def expand_sweep(config: ExperimentConfig) -> list[ExperimentConfig]:
     if config.sweep is None:
         return [config]
