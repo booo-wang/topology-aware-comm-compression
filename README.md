@@ -130,21 +130,3 @@ py -3 scripts/generate_dashboard.py
 2. Run `py -3 scripts/export_markdown_report.py`
 3. Run `py -3 scripts/generate_dashboard.py`
 4. Use the generated files in `results/` as portfolio artifacts
-
-## 这个项目展示什么
-
-This project is meant to signal that you can:
-
-- turn a research-adjacent idea into a usable engineering artifact
-- structure multi-agent experiments cleanly
-- compare system behavior under different communication settings
-- package results in a form that is easy to review and discuss
-
-## 后续方向
-
-Useful next steps for this repository:
-
-- add lightweight interactive filtering to the dashboard
-- add scenario presets for different communication narratives
-- add a small web viewer for browsing saved runs
-- add visual explanations of topology-specific tradeoffs
