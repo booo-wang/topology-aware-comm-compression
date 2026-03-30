@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+from tacc.reporting.findings import build_findings
+
 
 def load_latest_benchmark_result(results_dir: str | Path) -> tuple[Path, dict[str, object]]:
     results_path = Path(results_dir)
@@ -26,6 +28,7 @@ def build_markdown_report(result: dict[str, object], source_path: Path) -> str:
     top_result = result.get("top_result")
     experiments = result.get("experiments", [])
     top_five = experiments[:5]
+    findings = build_findings(result)
 
     lines = [
         "# Demo Report",
@@ -57,6 +60,11 @@ def build_markdown_report(result: dict[str, object], source_path: Path) -> str:
             ]
         )
 
+    if findings:
+        lines.extend(["## Current Findings", ""])
+        lines.extend([f"- {finding}" for finding in findings])
+        lines.append("")
+
     lines.extend(
         [
             "## Top 5 Scenarios",
@@ -79,18 +87,6 @@ def build_markdown_report(result: dict[str, object], source_path: Path) -> str:
                 efficiency=summary["avg_efficiency"],
             )
         )
-
-    lines.extend(
-        [
-            "",
-            "## Portfolio Notes",
-            "",
-            "- This project demonstrates practical multi-agent systems engineering rather than a paper-first benchmark.",
-            "- The main value is configurable simulation, reusable experiment workflows, and exportable reports for communication strategy comparisons.",
-            "- A useful next step would be an interactive visualization or small web dashboard on top of these saved results.",
-            "",
-        ]
-    )
 
     return "\n".join(lines)
 
