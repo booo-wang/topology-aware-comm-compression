@@ -102,7 +102,7 @@ def _build_findings(findings: list[str]) -> str:
         cards.append(
             f"""
             <div class="finding-card">
-              <div class="finding-title">Current finding</div>
+              <div class="finding-title">Working observation</div>
               <div class="finding-body">{html.escape(finding)}</div>
             </div>
             """.strip()
