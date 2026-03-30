@@ -4,6 +4,7 @@ import argparse
 import html
 from pathlib import Path
 
+from tacc.reporting.findings import build_findings
 from tacc.reporting.markdown import load_latest_benchmark_result
 
 
@@ -95,12 +96,27 @@ def _build_hop_bars(hops: list[float]) -> str:
     return "\n".join(bars)
 
 
+def _build_findings(findings: list[str]) -> str:
+    cards: list[str] = []
+    for finding in findings:
+        cards.append(
+            f"""
+            <div class="finding-card">
+              <div class="finding-title">Current finding</div>
+              <div class="finding-body">{html.escape(finding)}</div>
+            </div>
+            """.strip()
+        )
+    return "\n".join(cards)
+
+
 def build_dashboard_html(result: dict[str, object], source_path: Path) -> str:
     experiments = result["experiments"]
     top_result = result["top_result"]
     summary = top_result["summary"]
     comm = top_result["communication"]
     env = top_result["environment"]
+    findings = build_findings(result)
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -153,10 +169,10 @@ def build_dashboard_html(result: dict[str, object], source_path: Path) -> str:
     .hop-track {{ height: 12px; background: rgba(29,35,42,0.08); border-radius: 999px; overflow: hidden; }}
     .hop-fill {{ height: 100%; background: linear-gradient(90deg, var(--accent), #e58d2d); border-radius: 999px; }}
     .mini-grid {{ display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }}
-    .mini-card {{ padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.76); border: 1px solid var(--line); border-top: 4px solid var(--accent); }}
-    .mini-label {{ font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }}
+    .mini-card, .finding-card {{ padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.76); border: 1px solid var(--line); border-top: 4px solid var(--accent); }}
+    .mini-label, .finding-title {{ font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }}
     .mini-metric {{ font-size: 28px; margin: 8px 0 2px; }}
-    .mini-sub {{ font-size: 13px; color: var(--muted); line-height: 1.4; }}
+    .mini-sub, .finding-body {{ font-size: 13px; color: var(--muted); line-height: 1.5; }}
     .table-panel {{ padding: 16px; overflow: hidden; }}
     table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
     th, td {{ padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }}
@@ -178,7 +194,7 @@ def build_dashboard_html(result: dict[str, object], source_path: Path) -> str:
   <div class="page">
     <section class="hero">
       <div class="panel hero-main">
-        <div class="eyebrow">TACC Portfolio Dashboard</div>
+        <div class="eyebrow">TACC Findings Dashboard</div>
         <h1>Communication Strategy Explorer</h1>
         <div class="sub">A static results dashboard for comparing how topology, compression, and message budgets shape information recovery in a multi-agent sensor-fusion sandbox.</div>
         <div class="meta">
@@ -212,13 +228,18 @@ def build_dashboard_html(result: dict[str, object], source_path: Path) -> str:
         <div class="hop-stack">{_build_hop_bars(summary['avg_hop_mean_recalls'])}</div>
       </article>
       <article class="panel card">
-        <h2>What This Page Shows</h2>
+        <h2>Interpretation</h2>
         <div class="best-lines">
-          <div><strong>Practical angle</strong>: reusable comparison workflow and polished outputs.</div>
-          <div><strong>Systems angle</strong>: topology, budget, and dropout tradeoffs.</div>
-          <div><strong>Portfolio angle</strong>: static HTML that can be shipped with the repo.</div>
+          <div><strong>Question</strong>: how topology and compression shape recovery under bandwidth limits.</div>
+          <div><strong>Signal</strong>: compare raw recall, efficiency, and hop-wise information flow together.</div>
+          <div><strong>Use</strong>: early-stage comparative evidence before a more method-centered project.</div>
         </div>
       </article>
+    </section>
+
+    <section class="panel card" style="margin-bottom:18px;">
+      <h2>Current Findings</h2>
+      <div class="mini-grid">{_build_findings(findings)}</div>
     </section>
 
     <section class="panel card" style="margin-bottom:18px;">
