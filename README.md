@@ -76,6 +76,22 @@ py -3 -m venv .venv
 py -3 -m pip install -e .
 ```
 
+If you prefer installed command entry points, you can also run:
+
+```powershell
+tacc-smoke
+tacc-demo
+tacc-benchmark
+tacc-report
+tacc-dashboard
+```
+
+Run the test suite:
+
+```powershell
+py -3 -m pytest tests -q
+```
+
 Run a single baseline experiment:
 
 ```powershell

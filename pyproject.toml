@@ -5,13 +5,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tacc-marl"
 version = "0.1.0"
-description = "Topology-aware communication compression scaffold for multi-agent research."
+description = "Experimental sandbox for studying topology-aware communication compression in multi-agent systems."
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
   { name = "Wang Bo" }
 ]
 dependencies = []
+
+[project.scripts]
+tacc-smoke = "tacc.cli:smoke"
+tacc-benchmark = "tacc.cli:benchmark"
+tacc-demo = "tacc.cli:demo"
+tacc-report = "tacc.cli:report"
+tacc-dashboard = "tacc.cli:dashboard"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TACC Dashboard</title>
+  <style>
+    :root {
+      --bg: #f6f1e8;
+      --panel: rgba(255,255,255,0.78);
+      --ink: #1d232a;
+      --muted: #59636e;
+      --accent: #bc4c00;
+      --line: rgba(29,35,42,0.08);
+      --shadow: 0 18px 45px rgba(44, 31, 10, 0.12);
+      --radius: 22px;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(188,76,0,0.14), transparent 28%),
+        radial-gradient(circle at top right, rgba(31,111,235,0.10), transparent 24%),
+        linear-gradient(180deg, #fbf6ef 0%, var(--bg) 100%);
+    }
+    .page { max-width: 1180px; margin: 0 auto; padding: 36px 20px 64px; }
+    .hero { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; margin-bottom: 18px; }
+    .panel { background: var(--panel); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .hero-main { padding: 28px; }
+    .eyebrow { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    h1 { margin: 0 0 10px; font-size: clamp(32px, 5vw, 54px); line-height: 0.95; }
+    .sub { color: var(--muted); font-size: 17px; line-height: 1.55; max-width: 58ch; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .tag { border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; font-size: 13px; background: rgba(255,255,255,0.5); }
+    .hero-side { padding: 22px; display: grid; gap: 12px; }
+    .stat { padding: 14px 16px; border-radius: 16px; background: rgba(255,255,255,0.72); border: 1px solid var(--line); }
+    .stat-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-value { font-size: 28px; margin-top: 6px; font-weight: 700; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-bottom: 18px; }
+    .card { padding: 22px; }
+    .card h2 { margin: 0 0 14px; font-size: 20px; }
+    .best-lines { display: grid; gap: 8px; color: var(--muted); }
+    .best-lines strong { color: var(--ink); }
+    .hop-stack { display: grid; gap: 10px; }
+    .hop-row { display: grid; grid-template-columns: 70px 1fr 52px; gap: 10px; align-items: center; }
+    .hop-label, .hop-value { font-size: 13px; color: var(--muted); }
+    .hop-track { height: 12px; background: rgba(29,35,42,0.08); border-radius: 999px; overflow: hidden; }
+    .hop-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #e58d2d); border-radius: 999px; }
+    .mini-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+    .mini-card, .finding-card { padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.76); border: 1px solid var(--line); border-top: 4px solid var(--accent); }
+    .mini-label, .finding-title { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .mini-metric { font-size: 28px; margin: 8px 0 2px; }
+    .mini-sub, .finding-body { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .table-panel { padding: 16px; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .pill { display: inline-block; width: 10px; height: 10px; border-radius: 999px; margin-right: 8px; vertical-align: middle; }
+    .footer { margin-top: 16px; color: var(--muted); font-size: 13px; }
+    @media (max-width: 980px) {
+      .hero, .grid { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 640px) {
+      .page { padding: 20px 14px 44px; }
+      .mini-grid { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="panel hero-main">
+        <div class="eyebrow">TACC Findings Dashboard</div>
+        <h1>Communication Strategy Explorer</h1>
+        <div class="sub">A static results dashboard for comparing how topology, compression, and message budgets shape information recovery in a multi-agent sensor-fusion sandbox.</div>
+        <div class="meta">
+          <div class="tag">source demo_scenarios_20260327_115734.json</div>
+          <div class="tag">96 scenarios</div>
+          <div class="tag">best topology fully_connected</div>
+          <div class="tag">best compressor novelty_topk</div>
+        </div>
+      </div>
+      <div class="panel hero-side">
+        <div class="stat"><div class="stat-label">Benchmark</div><div class="stat-value">demo_scenarios</div></div>
+        <div class="stat"><div class="stat-label">Best Recall</div><div class="stat-value">1.000</div></div>
+        <div class="stat"><div class="stat-label">Efficiency</div><div class="stat-value">0.01101</div></div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel card">
+        <h2>Best Configuration</h2>
+        <div class="best-lines">
+          <div><strong>Scenario</strong>: fully_connected__novelty_topk__budget3__vis0.25__drop0.00</div>
+          <div><strong>Topology</strong>: fully_connected</div>
+          <div><strong>Compressor</strong>: novelty_topk</div>
+          <div><strong>Budget</strong>: 3</div>
+          <div><strong>Dropout</strong>: 0.0</div>
+          <div><strong>Visibility</strong>: 0.25</div>
+        </div>
+      </article>
+      <article class="panel card">
+        <h2>Hop Trajectory</h2>
+        <div class="hop-stack"><div class="hop-row">
+              <div class="hop-label">Hop 1</div>
+              <div class="hop-track"><div class="hop-fill" style="width:89%"></div></div>
+              <div class="hop-value">0.897</div>
+            </div>
+<div class="hop-row">
+              <div class="hop-label">Hop 2</div>
+              <div class="hop-track"><div class="hop-fill" style="width:99%"></div></div>
+              <div class="hop-value">0.998</div>
+            </div>
+<div class="hop-row">
+              <div class="hop-label">Hop 3</div>
+              <div class="hop-track"><div class="hop-fill" style="width:100%"></div></div>
+              <div class="hop-value">1.000</div>
+            </div></div>
+      </article>
+      <article class="panel card">
+        <h2>Interpretation</h2>
+        <div class="best-lines">
+          <div><strong>Question</strong>: how topology and compression shape recovery under bandwidth limits.</div>
+          <div><strong>Signal</strong>: compare raw recall, efficiency, and hop-wise information flow together.</div>
+          <div><strong>Use</strong>: early-stage comparative evidence before a more method-centered project.</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel card" style="margin-bottom:18px;">
+      <h2>Current Findings</h2>
+      <div class="mini-grid"><div class="finding-card">
+              <div class="finding-title">Working observation</div>
+              <div class="finding-body">A first pass over the sweep suggests that `fully_connected` is the strongest topology for raw recovery. Its average recall is 0.896, about 0.074 higher than `ring`.</div>
+            </div>
+<div class="finding-card">
+              <div class="finding-title">Working observation</div>
+              <div class="finding-body">The tradeoff picture is different from the raw-recall ranking: `star` looks best on efficiency (0.01523), even though `fully_connected` still leads on absolute recall.</div>
+            </div>
+<div class="finding-card">
+              <div class="finding-title">Working observation</div>
+              <div class="finding-body">One pattern that looks fairly consistent in this synthetic setting is that novelty-oriented compression behaves better than naive retransmission. Averaged over the current runs, novelty-based variants reach 0.866 recall / 0.01595 efficiency, compared with 0.626 / 0.00695 for `full_state`.</div>
+            </div>
+<div class="finding-card">
+              <div class="finding-title">Working observation</div>
+              <div class="finding-body">Looking at hop-wise behavior, the best configuration already reaches 0.998 recall by hop 2 and then saturates near 1.000. That makes the hop trajectory itself worth tracking, not just the final score.</div>
+            </div></div>
+    </section>
+
+    <section class="panel card" style="margin-bottom:18px;">
+      <h2>Topology Snapshot</h2>
+      <div class="mini-grid"><div class="mini-card" style="border-top-color: #8250df">
+              <div class="mini-label">fully_connected</div>
+              <div class="mini-metric">0.896</div>
+              <div class="mini-sub">avg recall across 24 runs</div>
+              <div class="mini-sub">efficiency 0.00848</div>
+            </div>
+<div class="mini-card" style="border-top-color: #2da44e">
+              <div class="mini-label">ring</div>
+              <div class="mini-metric">0.822</div>
+              <div class="mini-sub">avg recall across 24 runs</div>
+              <div class="mini-sub">efficiency 0.01306</div>
+            </div>
+<div class="mini-card" style="border-top-color: #1f6feb">
+              <div class="mini-label">chain</div>
+              <div class="mini-metric">0.733</div>
+              <div class="mini-sub">avg recall across 24 runs</div>
+              <div class="mini-sub">efficiency 0.01503</div>
+            </div>
+<div class="mini-card" style="border-top-color: #bc4c00">
+              <div class="mini-label">star</div>
+              <div class="mini-metric">0.692</div>
+              <div class="mini-sub">avg recall across 24 runs</div>
+              <div class="mini-sub">efficiency 0.01523</div>
+            </div></div>
+    </section>
+
+    <section class="panel table-panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Topology</th>
+            <th>Compressor</th>
+            <th>Budget</th>
+            <th>Visibility</th>
+            <th>Dropout</th>
+            <th>Recall</th>
+            <th>Efficiency</th>
+            <th>Hop Path</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget3__vis0.25__drop0.00</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>3</td>
+              <td>0.25</td>
+              <td>0.0</td>
+              <td>1.0000</td>
+              <td>0.011009</td>
+              <td>0.897 / 0.998 / 1.000</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget2__vis0.25__drop0.00</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>2</td>
+              <td>0.25</td>
+              <td>0.0</td>
+              <td>0.9980</td>
+              <td>0.011034</td>
+              <td>0.786 / 0.968 / 0.998</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget3__vis0.35__drop0.00</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>3</td>
+              <td>0.35</td>
+              <td>0.0</td>
+              <td>0.9980</td>
+              <td>0.010458</td>
+              <td>0.929 / 0.992 / 0.998</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget3__vis0.25__drop0.10</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>3</td>
+              <td>0.25</td>
+              <td>0.1</td>
+              <td>0.9980</td>
+              <td>0.010262</td>
+              <td>0.849 / 0.984 / 0.998</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget3__vis0.35__drop0.10</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>3</td>
+              <td>0.35</td>
+              <td>0.1</td>
+              <td>0.9960</td>
+              <td>0.010374</td>
+              <td>0.899 / 0.990 / 0.996</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget2__vis0.35__drop0.00</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>2</td>
+              <td>0.35</td>
+              <td>0.0</td>
+              <td>0.9921</td>
+              <td>0.010210</td>
+              <td>0.806 / 0.962 / 0.992</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget2__vis0.35__drop0.10</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>2</td>
+              <td>0.35</td>
+              <td>0.1</td>
+              <td>0.9881</td>
+              <td>0.010426</td>
+              <td>0.778 / 0.946 / 0.988</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#2da44e"></span>ring__novelty_topk__budget3__vis0.35__drop0.00</td>
+              <td>ring</td>
+              <td>novelty_topk</td>
+              <td>3</td>
+              <td>0.35</td>
+              <td>0.0</td>
+              <td>0.9821</td>
+              <td>0.015229</td>
+              <td>0.669 / 0.889 / 0.982</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#2da44e"></span>ring__degree_aware_novelty__budget3__vis0.35__drop0.00</td>
+              <td>ring</td>
+              <td>degree_aware_novelty</td>
+              <td>3</td>
+              <td>0.35</td>
+              <td>0.0</td>
+              <td>0.9821</td>
+              <td>0.015229</td>
+              <td>0.669 / 0.889 / 0.982</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#8250df"></span>fully_connected__novelty_topk__budget2__vis0.25__drop0.10</td>
+              <td>fully_connected</td>
+              <td>novelty_topk</td>
+              <td>2</td>
+              <td>0.25</td>
+              <td>0.1</td>
+              <td>0.9802</td>
+              <td>0.010344</td>
+              <td>0.750 / 0.921 / 0.980</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#2da44e"></span>ring__novelty_topk__budget3__vis0.25__drop0.00</td>
+              <td>ring</td>
+              <td>novelty_topk</td>
+              <td>3</td>
+              <td>0.25</td>
+              <td>0.0</td>
+              <td>0.9782</td>
+              <td>0.014586</td>
+              <td>0.605 / 0.849 / 0.978</td>
+            </tr>
+<tr>
+              <td><span class="pill" style="background:#2da44e"></span>ring__degree_aware_novelty__budget3__vis0.25__drop0.00</td>
+              <td>ring</td>
+              <td>degree_aware_novelty</td>
+              <td>3</td>
+              <td>0.25</td>
+              <td>0.0</td>
+              <td>0.9782</td>
+              <td>0.014586</td>
+              <td>0.605 / 0.849 / 0.978</td>
+            </tr>
+        </tbody>
+      </table>
+      <div class="footer">Showing the top 12 scenarios ranked by recall, then efficiency.</div>
+    </section>
+  </div>
+</body>
+</html>
